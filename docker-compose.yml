@@ -1,0 +1,116 @@
+version: '3'
+
+networks:
+  techzu:
+
+
+services:
+  app:
+    build:
+      context: ./dockerfiles
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "25080:80"
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - php
+      - redis
+      - mysql
+      - mailhog
+    networks:
+      - techzu
+
+  mysql:
+    image: mariadb:10.6
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "25306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: techzu
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - techzu
+
+  php:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "25000:9000"
+    volumes:
+      - ./src:/var/www/html:delegated
+    networks:
+      - techzu
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - "25379:6379"
+    networks:
+      - techzu
+
+  composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
+    networks:
+      - techzu
+
+  npm:
+    image: node:current-alpine
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "25999:3000"
+      - "25001:3001"
+      - "25173:5173"
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
+    networks:
+      - techzu
+
+  artisan:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - mysql
+    entrypoint: [ 'php', '/var/www/html/artisan' ]
+    networks:
+      - techzu
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - techzu
