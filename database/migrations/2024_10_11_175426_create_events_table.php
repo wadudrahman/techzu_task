@@ -14,7 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('events')) {
             Schema::create('events', function (Blueprint $table) {
                 $table->id();
-                $table->string('uuid')->unique();
+                $table->string('uuid')->unique()->index();
                 $table->string('title');
                 $table->date('date');
                 $table->time('time');
