@@ -29,16 +29,22 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>EVNT153248679</td>
-            <td>Introduction To Agile</td>
-            <td>10 Oct, 2024</td>
-            <td>09:00 AM - 05:00 PM</td>
-            <td><span class="badge bg-success me-1"></span>Upcoming</td>
-            <td class="text-end">
+        @foreach($events->items() as $event)
+            <tr>
+                <td>{{ $event->uuid }}</td>
+                <td>{{ $event->title }}</td>
+                <td>{{ $event->date }}</td>
+                <td>{{ $event->time }}</td>
+                <td>
+                    @if(\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->date . ' ' . $event->time)->isFuture())
+                        <span class="badge bg-success me-1"></span>Upcoming
+                    @else
+                        <span class="badge bg-danger me-1"></span>Completed
+                    @endif
+                </td>
+                <td class="text-end">
                 <span class="dropdown">
-                    <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
-                            data-bs-toggle="dropdown">
+                    <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                         Actions
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -46,19 +52,18 @@
                         <a class="dropdown-item" href="#">Another action</a>
                     </div>
                 </span>
-            </td>
-        </tr>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>
 <div class="card-footer d-flex align-items-center">
-    <p class="m-0 text-muted">Showing <span>1</span> to <span>8</span> of
-        <span>16</span> entries</p>
+    <p class="m-0 text-muted">Showing <span>{{ $events->firstItem() }}</span> to <span>{{ $events->lastItem() }}</span> of
+        <span>{{ $events->total() }}</span> entries</p>
     <ul class="pagination m-0 ms-auto">
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">4</a></li>
-        <li class="page-item"><a class="page-link" href="#">5</a></li>
+        @for($i = 1; $i <= ($events->total()/$events->perPage()+1); $i++)
+            <li class="page-item @if($events->currentPage() === $i) active @endif"><a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a></li>
+        @endfor
     </ul>
 </div>

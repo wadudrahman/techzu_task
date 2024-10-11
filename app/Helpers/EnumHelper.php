@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 enum EnumHelper
 {
-    public const UPCOMING = "UPCOMING",
+    public const EVENT_PREFIX = "EVNT",
+        UPCOMING = "UPCOMING",
         COMPLETED = "COMPLETED";
 }

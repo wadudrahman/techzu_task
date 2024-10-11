@@ -8,7 +8,7 @@
         <div class="container-xl">
             <div class="row g-2 text-center align-items-center flex-row-reverse">
                 <div class="col-lg-auto ms-lg-auto">
-                    <a href="{{ route('event.add') }}" class="btn btn-dark ms-auto">
+                    <a href="{{ route('showAddEvent') }}" class="btn btn-dark ms-auto">
                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"
                               fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"
                               stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-plus">
@@ -26,12 +26,28 @@
                     </h2>
                 </div>
             </div>
-
         </div>
     </div>
     <!-- Page body -->
     <div class="page-body">
         <div class="container-xl">
+            <div class="row row-cards">
+                <div class="col-12">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if(session('failure'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('failure') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+            </div>
             <div class="row row-cards">
                 <div class="col-12">
                     <div class="col-12">
