@@ -266,7 +266,7 @@
 
   /**
    * ------------------------------------------------------------------------
-   * Event Handler
+   * EventSeeder Handler
    * ------------------------------------------------------------------------
    */
   var EventHandler = {
@@ -634,7 +634,7 @@
       _this.shape = _this._createRegion(path, code, style);
       var text = _this.getLabelText(code, label);
 
-      // If label is passed and render function returns something 
+      // If label is passed and render function returns something
       if (label && text) {
         var bbox = _this.shape.getBBox();
         var offsets = _this.getLabelOffsets(code, label);

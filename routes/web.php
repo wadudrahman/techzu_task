@@ -8,7 +8,7 @@ Route::get('/', function () {
     return redirect()->route('list');
 });
 
-// Event Routes
+// EventSeeder Routes
 Route::group(['prefix' => 'events'], function () {
     Route::get('/add', [EventController::class, 'showAddEvent'])->name('showAddEvent');
     Route::post('/add', [EventController::class, 'addEvent'])->name('addEvent');

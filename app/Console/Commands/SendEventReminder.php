@@ -34,16 +34,14 @@ class SendEventReminder extends Command
     public function handle(): void
     {
         // Retrieve and Process Current Time
-        $currentDateTime = Carbon::now();
-        $reminderTime = $currentDateTime->copy()->addMinutes(15);
+        $currentDateTime = Carbon::now()->minute(0)->second(0);
+        $cutOffTime = $currentDateTime->copy()->addHour();
 
         // Retrieve Records
-        $events = Event::query()->where('date', '=', $currentDateTime->toDateString())
-            ->whereTime('time', '>=', $currentDateTime->toTimeString())
-            ->whereTime('time', '<=', $reminderTime->copy()->addHour()->toTimeString())
-            ->toRawSql();
-
-        dd($events);
+        $events = Event::query()->where('date', $currentDateTime->toDateString())
+            ->where('time', '>', $currentDateTime->toTimeString())
+            ->where('time', '<=', $cutOffTime->toTimeString())
+            ->get();
 
         foreach ($events as $event) {
             // Send Reminder
@@ -58,9 +56,9 @@ class SendEventReminder extends Command
         $guests = explode(';', $event->guests);
 
         foreach ($guests as $guest) {
-            $guest = trim($guest); // Clean up the email
+            $guest = trim($guest);
 
-            // Send email using Laravel's mail functionality
+            // Send Email
             Mail::raw("Reminder: Your event '{$event->title}' is scheduled to start at {$event->time}.", function ($message) use ($guest, $event) {
                 $message->to($guest)
                     ->subject("Reminder: Upcoming Event - {$event->title}");

@@ -7172,7 +7172,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Handles callbacks after an ad event was invoked
-       * @param {String} event - Event type
+       * @param {String} event - EventSeeder type
        * @param args
        */
       _defineProperty$1(this, "trigger", (event, ...args) => {
@@ -7187,7 +7187,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Add event listeners
-       * @param {String} event - Event type
+       * @param {String} event - EventSeeder type
        * @param {Function} callback - Callback for when event occurs
        * @return {Ads}
        */
@@ -8180,7 +8180,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Add event listeners
-       * @param {String} event - Event type
+       * @param {String} event - EventSeeder type
        * @param {Function} callback - Callback for when event occurs
        */
       _defineProperty$1(this, "on", (event, callback) => {
@@ -8188,7 +8188,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Add event listeners once
-       * @param {String} event - Event type
+       * @param {String} event - EventSeeder type
        * @param {Function} callback - Callback for when event occurs
        */
       _defineProperty$1(this, "once", (event, callback) => {
@@ -8196,7 +8196,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Remove event listeners
-       * @param {String} event - Event type
+       * @param {String} event - EventSeeder type
        * @param {Function} callback - Callback for when event occurs
        */
       _defineProperty$1(this, "off", (event, callback) => {
@@ -8204,7 +8204,7 @@ typeof navigator === "object" && (function (global, factory) {
       });
       /**
        * Destroy an instance
-       * Event listeners are removed when elements are removed
+       * EventSeeder listeners are removed when elements are removed
        * http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
        * @param {Function} callback - Callback for when destroy is complete
        * @param {Boolean} soft - Whether it's a soft destroy (for source changes etc)
@@ -8250,7 +8250,7 @@ typeof navigator === "object" && (function (global, factory) {
             // Replace the container with the original element provided
             replaceElement(this.elements.original, this.elements.container);
 
-            // Event
+            // EventSeeder
             triggerEvent.call(this, this.elements.original, 'destroyed', true);
 
             // Callback

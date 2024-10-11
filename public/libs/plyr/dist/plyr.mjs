@@ -6696,7 +6696,7 @@ class Ads {
     });
     /**
      * Handles callbacks after an ad event was invoked
-     * @param {String} event - Event type
+     * @param {String} event - EventSeeder type
      * @param args
      */
     _defineProperty$1(this, "trigger", (event, ...args) => {
@@ -6711,7 +6711,7 @@ class Ads {
     });
     /**
      * Add event listeners
-     * @param {String} event - Event type
+     * @param {String} event - EventSeeder type
      * @param {Function} callback - Callback for when event occurs
      * @return {Ads}
      */
@@ -7704,7 +7704,7 @@ class Plyr {
     });
     /**
      * Add event listeners
-     * @param {String} event - Event type
+     * @param {String} event - EventSeeder type
      * @param {Function} callback - Callback for when event occurs
      */
     _defineProperty$1(this, "on", (event, callback) => {
@@ -7712,7 +7712,7 @@ class Plyr {
     });
     /**
      * Add event listeners once
-     * @param {String} event - Event type
+     * @param {String} event - EventSeeder type
      * @param {Function} callback - Callback for when event occurs
      */
     _defineProperty$1(this, "once", (event, callback) => {
@@ -7720,7 +7720,7 @@ class Plyr {
     });
     /**
      * Remove event listeners
-     * @param {String} event - Event type
+     * @param {String} event - EventSeeder type
      * @param {Function} callback - Callback for when event occurs
      */
     _defineProperty$1(this, "off", (event, callback) => {
@@ -7728,7 +7728,7 @@ class Plyr {
     });
     /**
      * Destroy an instance
-     * Event listeners are removed when elements are removed
+     * EventSeeder listeners are removed when elements are removed
      * http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
      * @param {Function} callback - Callback for when destroy is complete
      * @param {Boolean} soft - Whether it's a soft destroy (for source changes etc)
@@ -7774,7 +7774,7 @@ class Plyr {
           // Replace the container with the original element provided
           replaceElement(this.elements.original, this.elements.container);
 
-          // Event
+          // EventSeeder
           triggerEvent.call(this, this.elements.original, 'destroyed', true);
 
           // Callback

@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use App\Helpers\EnumHelper;
-use App\Models\Event as EventModel;
+use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class Event extends Seeder
+class EventSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -47,6 +47,6 @@ class Event extends Seeder
         }
 
         // Insert into the database
-        EventModel::query()->insert($data);
+        Event::query()->insert($data);
     }
 }

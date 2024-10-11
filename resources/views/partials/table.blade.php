@@ -38,7 +38,7 @@
         <tbody>
         @if(empty($events))
             <tr>
-                <td rowspan="6"> No Data to Show !!</td>
+                <td class="text-center" colspan="6"> No Data to Show !!</td>
             </tr>
         @else
             @foreach($events->items() as $event)
@@ -75,15 +75,17 @@
         </tbody>
     </table>
 </div>
-<div class="card-footer d-flex align-items-center">
-    <p class="m-0 text-muted">Showing <span>{{ $events->firstItem() }}</span> to <span>{{ $events->lastItem() }}</span>
-        of
-        <span>{{ $events->total() }}</span> entries</p>
-    <ul class="pagination m-0 ms-auto">
-        @for($i = 1; $i <= ($events->total()/$events->perPage()+1); $i++)
-            <li class="page-item @if($events->currentPage() === $i) active @endif">
-                <a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a>
-            </li>
-        @endfor
-    </ul>
-</div>
+@if(!empty($events))
+    <div class="card-footer d-flex align-items-center">
+        <p class="m-0 text-muted">Showing <span>{{ $events->firstItem() }}</span> to <span>{{ $events->lastItem() }}</span>
+            of
+            <span>{{ $events->total() }}</span> entries</p>
+        <ul class="pagination m-0 ms-auto">
+            @for($i = 1; $i <= ($events->total()/$events->perPage()+1); $i++)
+                <li class="page-item @if($events->currentPage() === $i) active @endif">
+                    <a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+        </ul>
+    </div>
+@endif
