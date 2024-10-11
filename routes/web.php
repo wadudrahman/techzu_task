@@ -2,13 +2,14 @@
 
 use App\Helpers\EnumHelper;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ImportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('list');
 });
 
-// EventSeeder Routes
+// Event Routes
 Route::group(['prefix' => 'events'], function () {
     Route::get('/add', [EventController::class, 'showAddEvent'])->name('showAddEvent');
     Route::post('/add', [EventController::class, 'addEvent'])->name('addEvent');
@@ -21,4 +22,12 @@ Route::group(['prefix' => 'events'], function () {
     Route::get('/uuid/{uuid}', [EventController::class, 'getEventByUuid'])->name('view');
     Route::put('/uuid/{uuid}/update', [EventController::class, 'updateEventByUuid'])->name('update');
     Route::delete('/uuid/{uuid}/delete', [EventController::class, 'deleteEvent'])->name('delete');
+});
+
+// Import Routes
+Route::group(['prefix' => 'import'], function () {
+    Route::get('/download/sample', [ImportController::class, 'downloadSample'])->name('downloadSample');
+   Route::get('/csv', [ImportController::class, 'showCsvImport'])->name('showCsvImport');
+   Route::post('/csv', [ImportController::class, 'csvImport'])->name('csvImport');
+
 });

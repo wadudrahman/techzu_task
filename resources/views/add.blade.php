@@ -8,6 +8,18 @@
         <div class="container-xl">
             <div class="row g-2 text-center align-items-center flex-row-reverse">
                 <div class="col-lg-auto ms-lg-auto">
+                    <a href="{{ route('showCsvImport') }}" class="btn btn-outline-warning ms-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-up">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" />
+                            <path d="M16 3v4" />
+                            <path d="M8 3v4" />
+                            <path d="M4 11h16" />
+                            <path d="M19 22v-6" />
+                            <path d="M22 19l-3 -3l-3 3" />
+                        </svg>
+                        Import CSV
+                    </a>
                     <a href="{{ route('list') }}" class="btn btn-dark ms-auto">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-time">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -43,7 +55,7 @@
                                     <label class="form-label required">Event Title</label>
                                     <div>
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                               name="title" value="{{ old('title') }}"
+                                               name="title" value="{{ old('title') }}" required
                                                placeholder="Marina Bay Singapore Countdown">
                                         @error('title')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -53,7 +65,7 @@
                                 <div class="mb-3 col-6">
                                     <label class="form-label required">Select Date</label>
                                     <div>
-                                        <select class="form-select @error('date') is-invalid @enderror" name="date">
+                                        <select class="form-select @error('date') is-invalid @enderror" name="date" required>
                                             @foreach($availableDates as $availableDate)
                                                 <option value="{{ $availableDate }}">{{ $availableDate }}</option>
                                             @endforeach
@@ -67,7 +79,7 @@
                                 <div class="mb-3 col-6">
                                     <label class="form-label required">Select Time</label>
                                     <div>
-                                        <select class="form-select @error('time') is-invalid @enderror" name="time">
+                                        <select class="form-select @error('time') is-invalid @enderror" name="time" required>
                                             @foreach($availableSlots as $availableSlot)
                                                 <option value="{{ $availableSlot }}">{{ $availableSlot }}</option>
                                             @endforeach
@@ -82,7 +94,7 @@
                                     <label class="form-label required">Guests</label>
                                     <div>
                                         <input type="text" class="form-control  @error('guests') is-invalid @enderror"
-                                               name="guests" value="{{ old('guests') }}" placeholder="example@domain.com">
+                                               name="guests" value="{{ old('guests') }}" placeholder="example@domain.com" required>
                                         @error('guests')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
