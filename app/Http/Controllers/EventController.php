@@ -61,27 +61,89 @@ class EventController extends Controller
             Log::error('Error from Add Event: ' . $exception->getMessage() . ' At: ' . $exception->getFile() . ' Line: ' . $exception->getLine());
         }
 
-        return redirect()->route('list')->with('failure', 'Event added successfully.');
+        return redirect()->route('list')->with('failure', 'Add event failed.');
     }
 
     public function showEventList(string $status = null): View
     {
+        // Retrieve Search UUID
+        $searchUuid = request()->input('searchUuid');
+
         // Retrieve Event Record
-        $currentDateTime = Carbon::now();
         $events = Event::query()
             ->when(is_null($status), function ($query) {
-                return $query;
+                // Show Upcoming Events First
+                $query->where(function ($query) {
+                    $query->where('date', '>', now()->toDateString())
+                        ->orWhere(function ($query) {
+                            $query->where('date', '=', now()->toDateString())
+                                ->where('time', '>', now()->toTimeString());
+                        });
+                })
+                    ->orderBy('date', 'asc')
+                    ->orderBy('time', 'asc');
+
+                // Then Append Completed Events
+                $query->union(
+                    Event::query()->where(function ($query) {
+                        $query->where('date', '<', now()->toDateString())
+                            ->orWhere(function ($query) {
+                                $query->where('date', '=', now()->toDateString())
+                                    ->where('time', '<', now()->toTimeString());
+                            });
+                    })
+                        ->orderBy('date', 'desc')
+                        ->orderBy('time', 'desc')
+                );
             })
-            ->when($status === EnumHelper::UPCOMING, function ($query) use ($currentDateTime) {
-                return $query->where('date', '>=', $currentDateTime->format('Y-m-d'))
-                    ->where('time', '>=', $currentDateTime->format('H:i'));
+            ->when($status === EnumHelper::UPCOMING, function ($query) {
+                return $query->where(function ($query) {
+                    $query->where('date', '>', now()->toDateString())
+                        ->orWhere(function ($query) {
+                            $query->where('date', '=', now()->toDateString())
+                                ->where('time', '>', now()->toTimeString());
+                        });
+                })
+                    ->orderBy('date')
+                    ->orderBy('time');
             })
-            ->when($status === EnumHelper::COMPLETED, function ($query) use ($currentDateTime) {
-                return $query->where('date', '<=', $currentDateTime->format('Y-m-d'))
-                    ->where('time', '<=', $currentDateTime->format('H:i'));
+            ->when($status === EnumHelper::COMPLETED, function ($query) {
+                return $query->where(function ($query) {
+                    $query->where('date', '<', now()->toDateString())
+                        ->orWhere(function ($query) {
+                            $query->where('date', '=', now()->toDateString())
+                                ->where('time', '<', now()->toTimeString());
+                        });
+                })
+                    ->orderBy('date', 'desc')
+                    ->orderBy('time', 'desc');
+            })
+            ->when($searchUuid, function ($query) use ($searchUuid) {
+                return $query->where('uuid', 'like', '%' . $searchUuid . '%'); // Search by UUID
             })
             ->paginate(10);
 
-        return view('list', compact(['events']));
+        return view('list', compact(['events', 'status']));
+    }
+
+    public function getEventByUuid()
+    {
+
+    }
+
+    public function deleteEvent(string $uuid): RedirectResponse
+    {
+        try {
+            DB::transaction(function () use ($uuid) {
+                Event::query()->where('uuid', $uuid)->delete();
+            });
+
+            return redirect()->route('list')->with('success', 'Event deleted successfully.');
+        } catch (\Exception $exception) {
+            // Record Error
+            Log::error('Error from Delete Event: ' . $exception->getMessage() . ' At: ' . $exception->getFile() . ' Line: ' . $exception->getLine());
+        }
+
+        return redirect()->route('list')->with('failure', 'Delete event failed.');
     }
 }

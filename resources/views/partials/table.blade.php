@@ -1,23 +1,28 @@
 <div class="d-flex border-bottom pb-3 flex-row-reverse">
     <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-        <form action="./" method="get" autocomplete="off" novalidate="">
+        @php
+            $currentRouteName = request()->route()->getName();
+            $currentRouteParam = request()->route()->parameter('status');
+        @endphp
+        <form action="{{ route($currentRouteName, ['status' => $currentRouteParam]) }}" method="get" autocomplete="off" novalidate="">
             <div class="input-icon">
                     <span class="input-icon-addon">
                       <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                           stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                           stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                           stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                           <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
                           <path d="M21 21l-6 -6"></path>
                       </svg>
                     </span>
-                <input type="text" value="" class="form-control" placeholder="To Search Type & Press Enter">
+                <input type="text" name="searchUuid" value="" class="form-control" placeholder="To Search Type & Press Enter">
             </div>
         </form>
     </div>
 </div>
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap datatable">
+    <table class="table card-table table-vcenter text-nowrap">
         <thead>
         <tr>
             <th>ID</th>
@@ -48,8 +53,12 @@
                         Actions
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">View</a>
+                        <form action="{{ route('delete', ['uuid' => $event->uuid]) }}" method="post">
+                            <input class="dropdown-item" type="submit" value="Delete"/>
+                            @method('delete')
+                            @csrf
+                        </form>
                     </div>
                 </span>
                 </td>
@@ -59,11 +68,14 @@
     </table>
 </div>
 <div class="card-footer d-flex align-items-center">
-    <p class="m-0 text-muted">Showing <span>{{ $events->firstItem() }}</span> to <span>{{ $events->lastItem() }}</span> of
+    <p class="m-0 text-muted">Showing <span>{{ $events->firstItem() }}</span> to <span>{{ $events->lastItem() }}</span>
+        of
         <span>{{ $events->total() }}</span> entries</p>
     <ul class="pagination m-0 ms-auto">
         @for($i = 1; $i <= ($events->total()/$events->perPage()+1); $i++)
-            <li class="page-item @if($events->currentPage() === $i) active @endif"><a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a></li>
+            <li class="page-item @if($events->currentPage() === $i) active @endif"><a class="page-link"
+                                                                                      href="{{ $events->url($i) }}">{{ $i }}</a>
+            </li>
         @endfor
     </ul>
 </div>

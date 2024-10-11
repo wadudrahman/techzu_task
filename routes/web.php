@@ -12,14 +12,12 @@ Route::get('/', function () {
 Route::group(['prefix' => 'events'], function () {
     Route::get('/add', [EventController::class, 'showAddEvent'])->name('showAddEvent');
     Route::post('/add', [EventController::class, 'addEvent'])->name('addEvent');
-    Route::get('/{status?}', [EventController::class, 'showEventList'])
+    Route::get('/list/{status?}', [EventController::class, 'showEventList'])
         ->whereIn('status', [
             strtolower(EnumHelper::COMPLETED),
             strtolower(EnumHelper::UPCOMING)
         ])
         ->name('list');
-    Route::get('/{uuid}', [EventController::class, 'getEventByUuid'])
-        ->name('event.show');
-    Route::get('/{uuid}/cancel', [EventController::class, 'cancelEvent'])
-        ->name('event.cancel');
+    Route::get('/uuid/{uuid}', [EventController::class, 'getEventByUuid'])->name('show');
+    Route::delete('/uuid/{uuid}/delete', [EventController::class, 'deleteEvent'])->name('delete');
 });

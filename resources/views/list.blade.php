@@ -49,22 +49,27 @@
                 </div>
             </div>
             <div class="row row-cards">
-                <div class="col-12">
+
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-home-1" class="nav-link active" data-bs-toggle="tab"
-                                           aria-selected="true" role="tab">All</a>
+                                        <a href="{{ route('list') }}" class="nav-link @if(is_null($status)) active @endif">
+                                            All
+                                        </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab"
-                                           aria-selected="false" tabindex="-1" role="tab">Upcoming</a>
+                                        <a href="{{ route('list', ['status' => \App\Helpers\EnumHelper::UPCOMING]) }}"
+                                           class="nav-link @if($status === \App\Helpers\EnumHelper::UPCOMING) active @endif">
+                                            Upcoming
+                                        </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab"
-                                           aria-selected="false" tabindex="-1" role="tab">Completed</a>
+                                        <a href="{{ route('list', ['status' => \App\Helpers\EnumHelper::COMPLETED]) }}"
+                                           class="nav-link @if($status === \App\Helpers\EnumHelper::COMPLETED) active @endif">
+                                            Completed
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -73,17 +78,11 @@
                                     <div class="tab-pane active show" id="tabs-home-1" role="tabpanel">
                                         @include('partials.table')
                                     </div>
-                                    <div class="tab-pane" id="tabs-profile-1" role="tabpanel">
-                                        @include('partials.table')
-                                    </div>
-                                    <div class="tab-pane" id="tabs-settings-1" role="tabpanel">
-                                        @include('partials.table')
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
             </div>
         </div>
     </div>
