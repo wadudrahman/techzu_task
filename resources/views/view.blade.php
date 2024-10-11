@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                     <h2 class="page-title">
-                        Add New Event
+                        Update New Event
                     </h2>
                 </div>
             </div>
@@ -35,15 +35,16 @@
         <div class="container-xl">
             <div class="row row-cards">
                 <div class="col-md-6">
-                    <form class="card" method="post" action="{{ route('addEvent') }}">
+                    <form class="card" method="post" action="{{ route('update', ['uuid' => $event->uuid]) }}">
                         @csrf
+                        @method('PUT')
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3">
                                     <label class="form-label required">Event Title</label>
                                     <div>
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                               name="title" value="{{ old('title') }}"
+                                               name="title" value="{{ old('title', $event->title) }}"
                                                placeholder="Marina Bay Singapore Countdown">
                                         @error('title')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -55,7 +56,10 @@
                                     <div>
                                         <select class="form-select @error('date') is-invalid @enderror" name="date">
                                             @foreach($availableDates as $availableDate)
-                                                <option value="{{ $availableDate }}">{{ $availableDate }}</option>
+                                                <option value="{{ $availableDate }}"
+                                                    {{ old('date', \Carbon\Carbon::createFromFormat('Y-m-d', $event->date)->format('d M Y')) === $availableDate ? 'selected' : '' }}>
+                                                    {{ $availableDate }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('date')
@@ -69,7 +73,10 @@
                                     <div>
                                         <select class="form-select @error('time') is-invalid @enderror" name="time">
                                             @foreach($availableSlots as $availableSlot)
-                                                <option value="{{ $availableSlot }}">{{ $availableSlot }}</option>
+                                                <option value="{{ $availableSlot }}"
+                                                    {{ old('time', \Carbon\Carbon::createFromFormat('H:i:s', $event->time)->format('H:i')) === $availableSlot ? 'selected' : '' }}>
+                                                    {{ $availableSlot }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('time')
@@ -81,8 +88,8 @@
                                 <div class="mb-3">
                                     <label class="form-label required">Guests</label>
                                     <div>
-                                        <input type="text" class="form-control  @error('guests') is-invalid @enderror"
-                                               name="guests" value="{{ old('guests') }}" placeholder="example@domain.com">
+                                        <input type="text" class="form-control @error('guests') is-invalid @enderror"
+                                               name="guests" value="{{ old('guests', $event->guests) }}" placeholder="example@domain.com">
                                         @error('guests')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

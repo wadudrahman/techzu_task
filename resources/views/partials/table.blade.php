@@ -4,7 +4,8 @@
             $currentRouteName = request()->route()->getName();
             $currentRouteParam = request()->route()->parameter('status');
         @endphp
-        <form action="{{ route($currentRouteName, ['status' => $currentRouteParam]) }}" method="get" autocomplete="off" novalidate="">
+        <form action="{{ route($currentRouteName, ['status' => $currentRouteParam]) }}" method="get" autocomplete="off"
+              novalidate="">
             <div class="input-icon">
                     <span class="input-icon-addon">
                       <!-- Download SVG icon from http://tabler-icons.io/i/search -->
@@ -16,7 +17,8 @@
                           <path d="M21 21l-6 -6"></path>
                       </svg>
                     </span>
-                <input type="text" name="searchUuid" value="" class="form-control" placeholder="To Search Type & Press Enter">
+                <input type="text" name="searchUuid" value="" class="form-control"
+                       placeholder="To Search Type & Press Enter">
             </div>
         </form>
     </div>
@@ -34,26 +36,31 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($events->items() as $event)
+        @if(empty($events))
             <tr>
-                <td>{{ $event->uuid }}</td>
-                <td>{{ $event->title }}</td>
-                <td>{{ $event->date }}</td>
-                <td>{{ $event->time }}</td>
-                <td>
-                    @if(\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->date . ' ' . $event->time)->isFuture())
-                        <span class="badge bg-success me-1"></span>Upcoming
-                    @else
-                        <span class="badge bg-danger me-1"></span>Completed
-                    @endif
-                </td>
-                <td class="text-end">
+                <td rowspan="6"> No Data to Show !!</td>
+            </tr>
+        @else
+            @foreach($events->items() as $event)
+                <tr>
+                    <td>{{ $event->uuid }}</td>
+                    <td>{{ $event->title }}</td>
+                    <td>{{ $event->date }}</td>
+                    <td>{{ $event->time }}</td>
+                    <td>
+                        @if(\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->date . ' ' . $event->time)->isFuture())
+                            <span class="badge bg-success me-1"></span>Upcoming
+                        @else
+                            <span class="badge bg-danger me-1"></span>Completed
+                        @endif
+                    </td>
+                    <td class="text-end">
                 <span class="dropdown">
                     <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                         Actions
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">View</a>
+                        <a class="dropdown-item" href="{{ route('view', ['uuid' => $event->uuid]) }}">View</a>
                         <form action="{{ route('delete', ['uuid' => $event->uuid]) }}" method="post">
                             <input class="dropdown-item" type="submit" value="Delete"/>
                             @method('delete')
@@ -61,9 +68,10 @@
                         </form>
                     </div>
                 </span>
-                </td>
-            </tr>
-        @endforeach
+                    </td>
+                </tr>
+            @endforeach
+        @endif
         </tbody>
     </table>
 </div>
@@ -73,8 +81,8 @@
         <span>{{ $events->total() }}</span> entries</p>
     <ul class="pagination m-0 ms-auto">
         @for($i = 1; $i <= ($events->total()/$events->perPage()+1); $i++)
-            <li class="page-item @if($events->currentPage() === $i) active @endif"><a class="page-link"
-                                                                                      href="{{ $events->url($i) }}">{{ $i }}</a>
+            <li class="page-item @if($events->currentPage() === $i) active @endif">
+                <a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a>
             </li>
         @endfor
     </ul>

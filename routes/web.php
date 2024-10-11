@@ -18,6 +18,7 @@ Route::group(['prefix' => 'events'], function () {
             strtolower(EnumHelper::UPCOMING)
         ])
         ->name('list');
-    Route::get('/uuid/{uuid}', [EventController::class, 'getEventByUuid'])->name('show');
+    Route::get('/uuid/{uuid}', [EventController::class, 'getEventByUuid'])->name('view');
+    Route::put('/uuid/{uuid}/update', [EventController::class, 'updateEventByUuid'])->name('update');
     Route::delete('/uuid/{uuid}/delete', [EventController::class, 'deleteEvent'])->name('delete');
 });
