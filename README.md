@@ -32,3 +32,10 @@ Now we need to complete our laravel setup to run the application fully. Copy `.e
 `docker compose run --rm composer install` 
 `docker compose run --rm artisan key:generate`
 `docker compose run --rm artisan migrate --seed`
+
+Congrats, we have successfully run our application at `localhost:25080`.
+
+## Testing E-mail
+
+For automate testing, we need to configure supervisor for this project in our local machine. By default, it's scheduled to send out mails to guests 15 minute prior of the event.
+But to test the feature, we can simply run `docker compose run --rm artisan send:event-reminder` and check the inbox at `localhost:8025`.
